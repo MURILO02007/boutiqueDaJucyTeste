@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta nome="theme-color" content="#b8024d">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique Da Jucy</title>
+  <link rel="icon" href="img/logoJucy.jpg" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--cor-fundo);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      color: var(--cor-texto);
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    .logo {
+      border: 3px solid var(--cor-secundaria);
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .zap {
+      position: absolute;
+      left: 200px;
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s;
+      filter: brightness(0) invert(1);
+    }
+
+    .zap:hover {
+      transform: scale(1.1);
+    }
+    
+    /* Estilo para categoria ativa */
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        height: auto;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.1); 
+    }
+
+    .item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+        
+    }
+
+    .item:hover {
+        transform: translateY(-5px);
+        background-color: aliceblue;
+    }
+
+    .item img {
+        width: 100%;
+        height: 350px; /* Altura fixa para todas as imagens */
+        object-fit: cover; /* Mantém a proporção e cobre o espaço */
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .item p {
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .botao-ver {
+        display: inline-block;
+        background-color: #b8024d;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        text-decoration: none;
+        margin-top: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .botao-ver:hover {
+        background-color: #9a0242;
+    }
+    
+     .menu-btn {
+      position: absolute;
+      right: 200px;
+      top: 30px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #ffffff;
+      transition: right 0.3s;
+      z-index: 1002;
+      padding: 20px;
+      color: white;
+    }
+    
+    .sidebar.active {
+      right: 0;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: rgb(31, 31, 31);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .menubutao, .butao2 {
+      display: block;
+      
+      text-decoration: none;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      transition:  0.3s;
+    }
+    
+    
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1001;
+      display: none;
+    }
+    
+    .overlay.active {
+      display: block;
+    }
+
+    /* Categorias - Centralizado em telas grandes */
+    .categorias {
+      
+      padding: 10px 0;
+      text-align: center; /* Centraliza o conteúdo */
+    }
+    
+    .categorias ul {
+      display: inline-flex; /* Usa flex para alinhar os itens */
+      flex-wrap: wrap; /* Permite quebra de linha se necessário */
+      justify-content: center; /* Centraliza os itens */
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    
+    .categorias li {
+      margin: 5px;
+    }
+    
+    .categorias a {
+      display: inline-block;
+      padding: 8px 15px;
+      text-decoration: none;
+      color: #333;
+      border-radius: 50px;
+      transition: all 0.3s;
+      white-space: nowrap; /* Impede que o texto quebre */
+    }
+    
+    .categorias a.active {
+      background-color: #b8024d;
+      
+    }
+
+    @media (max-width: 768px) {
+      /* Ajustes para telas médias */
+      .logo {
+        width: 70px;
+        height: 70px;
+      }
+      
+      .zap {
+        width: 35px;
+        height: 35px;
+        left: 15px;
+        top: 15px;
+      }
+      
+      .container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        padding: 15px;
+      }
+      
+      .item img {
+        height: 200px;
+      }
+
+      /* Categorias roláveis em telas pequenas */
+      .categorias {
+        overflow-x: auto; /* Permite rolagem horizontal */
+        white-space: nowrap; /* Impede quebra de linha */
+        text-align: left; /* Alinha à esquerda para rolagem */
+        -webkit-overflow-scrolling: touch; /* Melhora rolagem em dispositivos móveis */
+      }
+      
+      .categorias ul {
+        display: inline-block; /* Muda para inline-block para rolagem */
+        white-space: nowrap; /* Mantém os itens em uma única linha */
+        width: auto; /* Permite que a largura seja maior que o container */
+        padding: 0 10px; /* Adiciona um pouco de padding nas laterais */
+      }
+      
+      .categorias li {
+        display: inline-block; /* Itens em linha */
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* Ajustes para telas muito pequenas */
+      .logo {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .categorias a {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    
+    <img class="zap" src="img/whatsapp.png" alt="">
+
+     <img class="logo" src="img/Design sem nome (1).png" alt="Logo Boutique Da Jucy">
+
+    <button id="menu-btn" class="menu-btn">☰ Menu</button>
+
+    <!-- Menu lateral -->
+    <div id="sidebar" class="sidebar">
+      <button class="close-btn" id="close-btn">×</button>
+      <h3>Menu</h3>
+      <a class="menubutao" href="index.html">🏠 Home</a>
+      <a class="menubutao" href="sobre.html">🎪 Sobre Nós</a>
+      <a class="menubutao" href="cadastro.html">📝 Cadastrar</a>
+      <a class="butao2" href="admin.html">🔐 Área do Adm</a>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+  </header>
+
+  <div class="categorias">
+    <ul>
+      <li><a class="tipo" href="#" onclick="filtrarProdutos('todas')">🎉 Todas</a></li>
+      <li><a class="tipo" href="#" onclick="filtrarProdutos('vestidos')">👗 Vestidos</a></li>
+      <li><a class="tipo" href="#" onclick="filtrarProdutos('blusas')">👚 Blusas</a></li>
+      <li><a class="tipo" href="#" onclick="filtrarProdutos('calcas')">👖 Calças</a></li>
+      <li><a class="tipo" href="#" onclick="filtrarProdutos('saias')">💃 Saias</a></li>
+      <li><a class="tipo" href="#" onclick="filtrarProdutos('acessorios')">🎀 Acessórios</a></li>
+    </ul>
+  </div>
+
+  <div class="container" id="produtos-container">
+    <!-- Produtos serão carregados aqui -->
+  </div>
+
+  <script>
+    // Menu Mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuBtn = document.getElementById('menu-btn');
+      const sidebar = document.getElementById('sidebar');
+      const closeBtn = document.getElementById('close-btn');
+      const overlay = document.getElementById('overlay');
+
+      menuBtn.addEventListener('click', function() {
+          sidebar.classList.add('active');
+          overlay.classList.add('active');
+      });
+
+      closeBtn.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+      });
+
+      overlay.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+      });
+    });
+
+    // Carrega produtos do localStorage ou usa os padrões
+    function carregarProdutosDoLocalStorage() {
+      const produtosSalvos = localStorage.getItem('produtos');
+      if (produtosSalvos) {
+        return JSON.parse(produtosSalvos);
+      } else {
+        // Produtos padrão caso não haja no localStorage
+        return [
+          {
+            id: 1,
+            nome: "Vestido Caipira",
+            preco: 129.90,
+            categoria: "vestidos",
+            imagem: "img/a5fcb50f69eb96aed9b89f7d59cbbbfa.webp",
+            descricao: "Vestido caipira com estampa xadrez"
+          },
+          {
+            id: 2,
+            nome: "Blusa de Renda",
+            preco: 79.90,
+            categoria: "blusas",
+            imagem: "img/a5fcb50f69eb96aed9b89f7d59cbbbfa.webp",
+            descricao: "Blusa de renda para festas juninas"
+          },
+          {
+            id: 3,
+            nome: "Calça Remendada",
+            preco: 149.90,
+            categoria: "calcas",
+            imagem: "img/a5fcb50f69eb96aed9b89f7d59cbbbfa.webp",
+            descricao: "Calça remendada estilo caipira"
+          }
+        ];
+      }
+    }
+
+    // Exibe os produtos na página
+    function carregarProdutos(produtosParaExibir) {
+      const container = document.getElementById('produtos-container');
+      container.innerHTML = '';
+
+      if (produtosParaExibir.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+            <p style="font-size: 1.2rem; color: var(--cor-primaria);">Nenhum produto encontrado nesta categoria!</p>
+            <p style="margin-top: 1rem;">Que tal dar uma olhada em nossas outras seções?</p>
+          </div>
+        `;
+        return;
+      }
+
+      produtosParaExibir.forEach(produto => {
+        container.innerHTML += `
+          <div class="item">
+            <img src="${produto.imagem}" alt="${produto.nome}">
+            <p>${produto.nome}</p>
+            <p>R$ ${produto.preco.toFixed(2)}</p>
+            <a href="produto.html?id=${produto.id}" class="botao-ver">Ver</a>
+          </div>
+        `;
+      });
+    }
+
+    // Filtra produtos por categoria
+    function filtrarProdutos(categoria) {
+      const todosProdutos = carregarProdutosDoLocalStorage();
+      
+      // Remove a classe active de todos os itens
+      document.querySelectorAll('.categorias a').forEach(a => {
+        a.classList.remove('active');
+      });
+      
+      if (categoria === 'todas') {
+        carregarProdutos(todosProdutos);
+        // Adiciona classe active apenas no botão Todas
+        document.querySelector('.categorias a[onclick="filtrarProdutos(\'todas\')"]').classList.add('active');
+      } else {
+        const produtosFiltrados = todosProdutos.filter(produto => produto.categoria === categoria);
+        carregarProdutos(produtosFiltrados);
+        // Adiciona classe active no botão da categoria selecionada
+        document.querySelector(`.categorias a[onclick="filtrarProdutos('${categoria}')"]`).classList.add('active');
+      }
+    }
+
+    // Carrega os produtos quando a página é aberta
+    document.addEventListener('DOMContentLoaded', () => {
+      const produtos = carregarProdutosDoLocalStorage();
+      carregarProdutos(produtos);
+    });
+
+    // Atualiza os produtos quando há mudanças no localStorage
+    window.addEventListener('storage', () => {
+      const produtos = carregarProdutosDoLocalStorage();
+      carregarProdutos(produtos);
+    });
+
+      // MODIFICAÇÃO IMPORTANTE: Atualize a função carregarProdutosDoLocalStorage
+    function carregarProdutosDoLocalStorage() {
+      const produtosSalvos = localStorage.getItem('produtos');
+      if (produtosSalvos) {
+        try {
+          const produtos = JSON.parse(produtosSalvos);
+          // Verifica se há produtos válidos
+          if (Array.isArray(produtos) && produtos.length > 0) {
+            return produtos;
+          }
+        } catch (e) {
+          console.error("Erro ao ler produtos do localStorage:", e);
+        }
+      }
+      
+      // Retorna array vazio se não houver produtos salvos
+      return [];
+    }
+
+    // ... (mantenha as outras funções existentes) ...
+
+    // ADICIONE ESTE EVENT LISTENER PARA ATUALIZAÇÃO AUTOMÁTICA
+    document.addEventListener('DOMContentLoaded', () => {
+      // Carrega produtos ao iniciar
+      const produtos = carregarProdutosDoLocalStorage();
+      carregarProdutos(produtos);
+      
+      // Observa mudanças no localStorage (incluindo de outras abas)
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'produtos') {
+          const produtos = carregarProdutosDoLocalStorage();
+          carregarProdutos(produtos);
+        }
+      });
+    });
+
+    // ADICIONE ESTA FUNÇÃO PARA ATUALIZAR QUANDO VOLTAR DA PÁGINA ADMIN
+    window.addEventListener('pageshow', () => {
+      const produtos = carregarProdutosDoLocalStorage();
+      carregarProdutos(produtos);
+    });
+  </script>
+</body>
+</html>
